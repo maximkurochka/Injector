@@ -3,6 +3,7 @@
 // Разработать DLL Injector использующий CreateRemoteThread. протестировать на "Hello World" динамической библиотеке
 
 #include <iostream>
+#include <string>
 #include <Windows.h>
 #include <tlhelp32.h>
 
@@ -147,5 +148,25 @@ bool EjectDllFromTheProcess(DWORD processId, PCWSTR dllPath)
 
 int main()
 {
+	DWORD processId;
+	std::wstring dllPath;
+
+	std::cout << "Input the process id for injection: ";
+	std::cin >> processId;
+
+	std::cout << "Input the path to dll which will be injected: ";
+	getline(std::wcin, dllPath);
+
+	if (InjectDllToTheProcess(processId, dllPath.c_str()))
+	{
+		std::cout << "Dll is injected" << std::endl;
+		Sleep(10000);
+		EjectDllFromTheProcess(processId, dllPath.c_str());
+	}
+	else
+	{
+		std::cout << "Dll is not injected" << std::endl;
+	}
+
 	return 0;
 }
